@@ -1,9 +1,11 @@
 import { forwardRef, useImperativeHandle,useRef } from "react";
 
 
-const ResultModal = forwardRef(function ResultModal({result,targetTime},ref){
+const ResultModal = forwardRef(function ResultModal({result,targetTime,remainingTime,onReset},ref){
 
     const dialog = useRef();
+
+    const hasUserWon = remainingTime > 0;
 
     useImperativeHandle(ref,()=>{
     return {
@@ -18,9 +20,9 @@ const ResultModal = forwardRef(function ResultModal({result,targetTime},ref){
 
     return <dialog ref={dialog} className="result-modal">
         <h2>You {result}</h2>
-        <p>The target time was <strong>{targetTime}</strong> seconds.</p>
-        <p>You stopped the timer with <strong>X seconds left.</strong></p>
-        <form method="dialog">
+        <p>The target time was <strong>{targetTime}</strong> second{targetTime > 1 ? 's' : ''}.</p>
+        {hasUserWon && <p>You stopped the timer with <strong>{remainingTime} seconds left.</strong></p>}
+        <form method="dialog" onSubmit={onReset}>
             <button>Close</button>
         </form>
     </dialog>
